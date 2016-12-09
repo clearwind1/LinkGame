@@ -28,6 +28,7 @@ var game_file_list = [
 	"bin-debug/GameUtils3/RandomUtils.js",
 	"bin-debug/GameUtils3/ScrollView.js",
 	"bin-debug/GameUtils3/SharePage.js",
+	"bin-debug/GameUtils3/StageUtils.js",
 	"bin-debug/GameUtils3/TipsPanel.js",
 	"bin-debug/GameUtils3/WaitServerPanel.js",
 	"bin-debug/GameUtils3/utils.js",

@@ -7,13 +7,14 @@ module GameUtil
     export class BassPanel extends egret.DisplayObjectContainer
     {
 
-        public mStageW = egret.MainContext.instance.stage.stageWidth;
-        public mStageH = egret.MainContext.instance.stage.stageHeight;
+        public mStageW = StageUtils.stageW;
+        public mStageH = StageUtils.stageH;
 
         public constructor()
         {
             super();
             this.addEventListener(egret.Event.ADDED_TO_STAGE,this.onAddToStage,this);
+            StageUtils.stage.addEventListener(egret.Event.RESIZE,this.resize,this);
         }
         private onAddToStage(event:egret.Event):void
         {
@@ -23,6 +24,12 @@ module GameUtil
         {
 
         }
+
+        public resize():void
+        {
+
+        }
+
     }
 
     /*

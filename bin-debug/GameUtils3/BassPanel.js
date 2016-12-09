@@ -8,15 +8,18 @@ var GameUtil;
         __extends(BassPanel, _super);
         function BassPanel() {
             _super.call(this);
-            this.mStageW = egret.MainContext.instance.stage.stageWidth;
-            this.mStageH = egret.MainContext.instance.stage.stageHeight;
+            this.mStageW = StageUtils.stageW;
+            this.mStageH = StageUtils.stageH;
             this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
+            StageUtils.stage.addEventListener(egret.Event.RESIZE, this.resize, this);
         }
         var d = __define,c=BassPanel,p=c.prototype;
         p.onAddToStage = function (event) {
             this.init();
         };
         p.init = function () {
+        };
+        p.resize = function () {
         };
         return BassPanel;
     }(egret.DisplayObjectContainer));

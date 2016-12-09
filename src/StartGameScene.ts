@@ -40,6 +40,11 @@ class StartGameScene extends GameUtil.BassPanel
 
     }
 
+    public resize()
+    {
+        //console.log('mstagew====',StageUtils.stageW);
+    }
+
     private startgame()
     {
         console.log('start');

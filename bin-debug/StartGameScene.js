@@ -31,6 +31,9 @@ var StartGameScene = (function (_super) {
         this.addChild(startbtn);
         //console.log('btny=====',startbtn.y,'stageh=====',this.mStageH);
     };
+    p.resize = function () {
+        //console.log('mstagew====',StageUtils.stageW);
+    };
     p.startgame = function () {
         console.log('start');
         GameUtil.GameScene.runscene(new GameScene());
