@@ -40,8 +40,7 @@ class StartGameScene extends GameUtil.BassPanel
 
     }
 
-    public resize()
-    {
+    public resize() {
         //console.log('mstagew====',StageUtils.stageW);
     }
 

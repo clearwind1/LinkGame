@@ -10,6 +10,8 @@ class GameScene extends GameUtil.BassPanel
     private elementcontain: egret.DisplayObjectContainer;
     private tilearr: boolean[][];
 
+    private createobj: number[][];
+
     public constructor()
     {
         super();
@@ -28,6 +30,13 @@ class GameScene extends GameUtil.BassPanel
         }
         this.tilearr = tArray;
 
+        this.createobj =   [[1,0,2,0,1],
+                            [1,0,2,0,1],
+                            [1,0,2,0,1],
+                            [0,0,0,0,0],
+                            [0,0,0,0,0],
+                            [0,0,0,0,0],];
+
         this.showgamescene();
     }
 
@@ -41,20 +50,36 @@ class GameScene extends GameUtil.BassPanel
         this.elementcontain.$setTouchEnabled(true);
         this.elementcontain.addEventListener(egret.TouchEvent.TOUCH_TAP,this.touchele,this);
 
+        //console.log('creaobj======',this.createobj);
         //生成元素
         for(var i:number = 0;i < GameUtil.GameConfig.MAXCOL*GameUtil.GameConfig.MAXROW;i++)
         {
-            var type: number = Math.floor(i/2);
-            var posx: number = (this.mStageW/2-200) + 100*Math.floor(i/GameUtil.GameConfig.MAXROW);
-            var posy: number = 400 + 100*(i%GameUtil.GameConfig.MAXROW);
-            var pic: ElementSprite = new ElementSprite(RES.getRes('type'+type+'_png'),posx,posy);
-            pic.initpro(type,Math.floor(i/GameUtil.GameConfig.MAXROW),i%GameUtil.GameConfig.MAXROW);
-            //console.log('type=====',Math.floor((i+j*GameUtil.GameConfig.MAXROW)/2));
+            var posy: number = Math.floor(i/GameUtil.GameConfig.MAXROW);
+            var posx: number = i%GameUtil.GameConfig.MAXROW;
+
+            var type: number = this.createobj[posy][posx];
+            //console.log('type====',type);
+            if(type == 0)
+            {
+                continue;
+            }
+
+            var x: number = (this.mStageW/2-200) + 100*posx;
+            var y: number = 400 + 100*posy;
+            var pic: ElementSprite = new ElementSprite(RES.getRes('type'+type+'_png'),x,y);
+            pic.initpro(type,posx,posy);
+
+
+            //var type: number = Math.floor(i/2);
+            //var posx: number = (this.mStageW/2-200) + 100*Math.floor(i/GameUtil.GameConfig.MAXROW);
+            //var posy: number = 400 + 100*(i%GameUtil.GameConfig.MAXROW);
+            //var pic: ElementSprite = new ElementSprite(RES.getRes('type'+type+'_png'),posx,posy);
+            //pic.initpro(type,Math.floor(i/GameUtil.GameConfig.MAXROW),i%GameUtil.GameConfig.MAXROW);
             this.elementcontain.addChild(pic);
             this.tilearr[pic.posx][pic.posy] = true;
         }
 
-        this.randompos();
+        //this.randompos();
 
     }
     //元素乱序
@@ -145,13 +170,10 @@ class GameScene extends GameUtil.BassPanel
         if(sourcey == tagety){
             var isnull = true;
             //直线判断
-            for(var i:number=sourcex+1;i < tagetx;i++)
+            var curx = this.judeHorizontal(sourcex+1,sourcey,tagetx);
+            if(curx != tagetx)
             {
-                if(this.tilearr[i][sourcey])
-                {
-                    isnull = false;
-                    break;
-                }
+                isnull = false;
             }
             if(isnull){
                 return true;
@@ -191,7 +213,7 @@ class GameScene extends GameUtil.BassPanel
                 }
                 //往上判断结束
                 //往下判断
-                for(var y:number=sourcey+1;y <= GameUtil.GameConfig.MAXROW;y++) {
+                for(var y:number=sourcey+1;y <= GameUtil.GameConfig.MAXCOL;y++) {
                     isnull = true;
                     if (!this.tilearr[sourcex][y]) {
                         for (var x:number = sourcex + 1; x <= tagetx; x++) {
@@ -211,9 +233,8 @@ class GameScene extends GameUtil.BassPanel
                                 return true;
                             }
                         }
-                        else {
-                            break;
-                        }
+                    }else {
+                        break;
                     }
                 }
                 //往下判断结束
@@ -222,16 +243,35 @@ class GameScene extends GameUtil.BassPanel
 
         return bcanlink;
     }
-    //判断竖线
+
+    /**
+     * 判断竖方向
+     * @param sourcex
+     * @param sourcey
+     * @param tagety
+     * @returns {number}
+     */
     private judeVertical(sourcex:number,sourcey:number,tagety:number): number
     {
-        var curY = 0;
+        var curY = tagety;
         if(sourcey > tagety)
         {
             for(var y:number= sourcey;y>tagety;y--)
             {
                 if(!this.tilearr[sourcex][y])
                 {
+                    curY = y;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for(var y:number= sourcey;y<tagety;y++)
+            {
+                if(!this.tilearr[sourcex][y])
+                {
+                    curY = y;
                     break;
                 }
             }
@@ -241,10 +281,30 @@ class GameScene extends GameUtil.BassPanel
         return curY;
 
     }
-    //判断横线
-    private judeHorizontal()
-    {
 
+    /**
+     * 判断横方向
+     * @param sourcex
+     * @param sourcey
+     * @param tagetx
+     * @returns {number}
+     */
+    private judeHorizontal(sourcex:number,sourcey:number,tagetx:number): number
+    {
+        var curX = tagetx;
+        for(var x:number= sourcex;x<tagetx;x++)
+        {
+            //console.log('x====',x,'sourcey=====',sourcey);
+            //console.log('tilearr=====',this.tilearr[x][sourcey]);
+            if(this.tilearr[x][sourcey])
+            {
+                curX = x;
+                break;
+            }
+        }
+
+        //console.log('curx====',curX);
+        return curX;
     }
 
     //播放连线效果
@@ -255,11 +315,13 @@ class GameScene extends GameUtil.BassPanel
         this.bplayEffect = true;
         var self:any = this;
         var contain = obj.parent;
-        egret.Tween.get(this._selectSprite).to({scaleX:0,scaleY:0},1000);
+        var selectsp = this._selectSprite;
+        this._selectSprite = null;
+        egret.Tween.get(selectsp).to({scaleX:0,scaleY:0},1000);
         egret.Tween.get(obj).to({scaleX:0,scaleY:0},1000).call(function(){
             contain.removeChild(obj);
-            contain.removeChild(self._selectSprite);
-            self._selectSprite = null;
+            contain.removeChild(selectsp);
+            //self._selectSprite = null;
             self.bplayEffect = false;
         });
     }

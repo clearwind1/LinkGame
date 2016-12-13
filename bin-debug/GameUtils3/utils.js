@@ -21,8 +21,8 @@ var GameUtil;
         p.getSH = function () {
             return this.stagetY;
         };
-        GameConfig.MAXCOL = 5;
-        GameConfig.MAXROW = 6;
+        GameConfig.MAXCOL = 6;
+        GameConfig.MAXROW = 5;
         GameConfig.IP = "api.h5.gamexun.com"; //http连接地址
         GameConfig.bRunFPS = false; //是否显示FPS
         //场景转换

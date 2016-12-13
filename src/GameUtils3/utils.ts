@@ -7,8 +7,8 @@ module GameUtil
     //游戏配置
     export class GameConfig
     {
-        public static MAXCOL: number = 5;
-        public static MAXROW: number = 6;
+        public static MAXCOL: number = 6;
+        public static MAXROW: number = 5;
 
         public static IP:string = "api.h5.gamexun.com";        //http连接地址
         public static bRunFPS:boolean = false;              //是否显示FPS
